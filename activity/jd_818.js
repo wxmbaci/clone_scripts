@@ -44,8 +44,7 @@ if ($.isNode()) {
 
 const JD_API_HOST = 'https://rdcseason.m.jd.com/api/';
 const activeEndTime = '2021/2/4 00:59:59+08:00';
-const addUrl = 'http://jd.turinglabs.net/helpcode/create/';
-const printUrl = `http://jd.turinglabs.net/api/v2/jd/5g/read/30/`;
+
 let helpCode = []
 !(async () => {
   if (!cookiesArr[0]) {
@@ -53,7 +52,6 @@ let helpCode = []
     return;
   }
   $.temp = [];
-  await updateShareCodesCDN();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -569,92 +567,8 @@ function saveJbean(id) {
     })
   })
 }
-async function doHelp() {
-  console.log(`脚本自带助力码数量:${helpCode.length}`)
-  let body = '', nowTime = Date.now(), tempCode = [];
-  const zone = new Date().getTimezoneOffset();
-  if (zone === 0) {
-    nowTime += 28800000;//UTC-0时区加上8个小时
-  }
-  // await updateShareCodes();
-  // if (!$.updatePkActivityIdRes) await updateShareCodesCDN();
-  if ($.updatePkActivityIdRes && $.updatePkActivityIdRes['shareCodes']) tempCode = $.updatePkActivityIdRes['shareCodes'];
-  console.log(`是否大于当天九点🕘:${nowTime > new Date(nowTime).setHours(9, 0, 0, 0)}`)
-  //当天大于9:00才从API里面取收集的助力码
-  //if (nowTime > new Date(nowTime).setHours(9, 0, 0, 0)) body = await printAPI();//访问收集的互助码
-  body = await printAPI();//访问收集的互助码
-  if (body && body['data']) {
-    // console.log(`printAPI返回助力码数量:${body.replace(/"/g, '').split(',').length}`)
-    // tempCode = tempCode.concat(body.replace(/"/g, '').split(','))
-    tempCode = [...tempCode, ...body['data']]
-  }
-  console.log(`累计助力码数量:${tempCode.length}`)
-  //去掉重复的
-  tempCode = [...new Set(tempCode)];
-  console.log(`去重后总助力码数量:${tempCode.length}`)
-  for (let item of tempCode) {
-    if (!item) continue;
-    const helpRes = await toHelp(item.trim());
-    if (helpRes.data.status === 5) {
-      console.log(`助力机会已耗尽，跳出助力`);
-      break;
-    }
-  }
-}
-function printAPI() {
-  return new Promise(resolve => {
-    $.get({url: `${printUrl}`, 'timeout': 10000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          data = JSON.parse(data);
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
-function toHelp(code) {
-  return new Promise(resolve => {
-    const options = {
-      "url": `${JD_API_HOST}task/toHelp`,
-      "body": `shareId=${code}`,
-      "headers": {
-        "Host": "rdcseason.m.jd.com",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Origin": "https://rdcseason.m.jd.com",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Cookie": cookie,
-        "Connection": "keep-alive",
-        "Accept": "application/json, text/plain, */*",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.2 Mobile/15E148 Safari/604.1",
-        "Referer": "https://rdcseason.m.jd.com/",
-        "Content-Length": "44",
-        "Accept-Language": "zh-cn"
-      }
-    }
-    $.post(options, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          console.log(`助力结果:${data}`);
-          data = JSON.parse(data);
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
+
+
 function getHelp() {
   return new Promise(resolve => {
     const options = {
@@ -679,7 +593,6 @@ function getHelp() {
           data = JSON.parse(data);
           if (data.code === 200) {
             console.log(`\n您的助力码shareId(互助码每天都是变化的)\n\n"${data.data.shareId}",\n`);
-            // console.log(`每日9:00以后复制下面的URL链接在浏览器里面打开一次就能自动上车\n\n${addUrl}${data.data.shareId}\n`);
             let ctrTemp;
             if ($.isNode() && process.env.JD_818_SHAREID_NOTIFY) {
               console.log(`环境变量JD_818_SHAREID_NOTIFY::${process.env.JD_818_SHAREID_NOTIFY}`)
@@ -687,23 +600,7 @@ function getHelp() {
             } else {
               ctrTemp = `${jdNotify}` === 'true';
             }
-            // console.log(`是否发送上车推送链接:${ctrTemp ? '是' : '否'}`)
-            // // 只在早晨9点钟触发一次
-            // let NowHours = new Date().getHours();
-            // const zone = new Date().getTimezoneOffset();
-            // if (zone === 0) {
-            //   NowHours += 8;//UTC-0时区加上8个小时
-            // }
-            // if (ctrTemp && NowHours === 9 && $.isNode()) await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}互助码自动上车`, `[9:00之后上车]您的互助码上车链接是 ↓↓↓ \n\n ${addUrl}${data.data.shareId} \n\n ↑↑↑`, {
-            //   url: `${addUrl}${data.data.shareId}`
-            // })
-            // await $.http.get({url: `http://jd.turinglabs.net/helpcode/add/${data.data.shareId}/`}).then((resp) => {
-            //   console.log(resp);
-            //   return
-            //   if (resp.statusCode === 200) {
-            //     const { body } = resp;
-            //   }
-            // });
+
             $.temp.push(data.data.shareId);
           }
         }
@@ -827,41 +724,7 @@ function getListRank() {
     })
   })
 }
-function updateShareCodes(url = 'https://raw.githubusercontent.com/xxxx/updateTeam/master/jd_shareCodes.json') {
-  return new Promise(resolve => {
-    $.get({url}, async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-        } else {
-          $.updatePkActivityIdRes = JSON.parse(data);
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
-function updateShareCodesCDN(url = 'https://cdn.jsdelivr.net/gh/gitupdate/updateTeam@master/shareCodes/jd_shareCodes.json') {
-  return new Promise(resolve => {
-    $.get({url , headers:{"User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")}}, async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          $.updatePkActivityIdRes = JSON.parse(data);
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
+
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {

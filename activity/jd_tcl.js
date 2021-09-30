@@ -27,9 +27,7 @@ const sck = $.isNode() ? "set-cookie" : "Set-Cookie";
 let cookiesArr = [],
   cookie = "",
   message;
-let shareUUID= [
-  '262AD0499F3DBB829A73A2D6A7C9B4F32616D531C3528AC13306F568F805BCBC98C78860AD2DDA6EACB606811A93B977D5541778D6BA2AAA3F72022FEF371B086688517369194A1C9489E6861B365E9DCC404E4905CE4ACDDDB48F49F13BFF8E',
-  '262AD0499F3DBB829A73A2D6A7C9B4F32616D531C3528AC13306F568F805BCBC98C78860AD2DDA6EACB606811A93B977D5541778D6BA2AAA3F72022FEF371B086688517369194A1C9489E6861B365E9DCC404E4905CE4ACDDDB48F49F13BFF8E'
+let shareUUID = [
 ]
 let isPurchaseShops = false
 isPurchaseShops = $.isNode() ? (process.env.PURCHASE_SHOPS ? process.env.PURCHASE_SHOPS : isPurchaseShops) : ($.getdata("isPurchaseShops") ? $.getdata("isPurchaseShops") : isPurchaseShops);
@@ -101,7 +99,7 @@ async function main() {
   await draw()
 }
 
-function helpFriend(inviterNickAes = '4C8602ED441A318612CD57B4A16EB59EE8AF00C05E1043CAA3E9C10B6DA615700C9463CE3D33670238160230F84D490EE29440149504E2EB1EAD11840F8E2980DDDA672BF446E2FCC0D1D6B4E52826D1') {
+function helpFriend(inviterNickAes = '') {
   return new Promise((resolve) => {
     $.post(taskUrl('/ql/front/tcl002/helpFriend', `inviterNickAes=${inviterNickAes}`), async (err, resp, data) => {
       try {
