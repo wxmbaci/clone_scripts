@@ -8,8 +8,8 @@ jobs:
       - name: git-sync
         uses: wei/git-sync@v3
         with:
-          source_repo: "shufflewzc/faker2"
+          source_repo: "https://wxmbaci:${{ secrets.PAT }}@github.com/shufflewzc/faker2.git"
           source_branch: "main"
-          destination_repo: "wxmbaci/clone_scripts"
+          destination_repo: "https://username:${{ secrets.PAT }}@github.com/wxmbaci/clone_scripts.git"
           destination_branch: "faker2"
 
