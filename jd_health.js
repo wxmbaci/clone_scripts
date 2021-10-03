@@ -136,26 +136,6 @@ function getTaskDetail(taskId = '') {
                 console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken}\n`);
                 // console.log('好友助力码：' + data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken)
 
-                // ***************************
-                // 报告运行次数
-                if(data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken){
-                  $.get({
-                  url: `https://cdn.nz.lu/api/runTimes?activityId=health&sharecode=${data?.data?.result?.taskVos[0].assistTaskDetailVo.taskToken}`,
-                  headers: {
-                    'Host': 'api.jdsharecode.xyz'
-                  },
-                  timeout: 10000
-                  }, (err, resp, data) => {
-                    if (err) {
-                      console.log('上报失败', err)
-                    } else {
-                      if (data === '1' || data === '0') {
-                        console.log('上报成功')
-                      }
-                    }
-                  })
-                }
-                // ***************************
 
               }
             } else if (taskId === 22) {
