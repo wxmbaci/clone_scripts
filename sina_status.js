@@ -49,7 +49,7 @@ let allMessageMonth = "";
       if(err) throw err;
       allMessageMonth += "未转发数量：" +results[0].num+`\n`; 
       console.log(allMessageMonth);
-      // notify.sendNotify(`微博统计信息`, `${allMessageMonth}`);
+      notify.sendNotify(`微博统计信息`, `${allMessageMonth}`);
     })
   con.end();
 
