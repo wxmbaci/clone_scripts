@@ -1,5 +1,5 @@
 /*
-cron "30 * * * *" jd_CheckCK.js, tag:京东CK检测by-ccwav
+cron "30 8,12,15,18,21 * * *" jd_CheckCK.js, tag:京东CK检测by-ccwav
  */
 //Check Ck Tools by ccwav
 //Update : 20210903
@@ -7,7 +7,7 @@ cron "30 * * * *" jd_CheckCK.js, tag:京东CK检测by-ccwav
 //增加变量永远通知CK状态:  export CKALWAYSNOTIFY="true"
 //增加变量停用自动启用CK:  export CKAUTOENABLE="false"
 //增加变量不显示CK备注:  export CKREMARK="false"
-const $ = new Env('京东CK检测');
+const $ = new Env('微博统计');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 var mysql      = require('mysql');
