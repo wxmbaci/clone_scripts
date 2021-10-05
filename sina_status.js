@@ -32,18 +32,22 @@ let allMessageMonth = "";
      if(err)  console.log(allMessageMonth);;
      allMessageMonth += "SUB 更新时间为 " +dateFtt(results[0].update_time)+" \nSUB值为："+results[0].value +`\n`;
     })
-    console.log(1);
+
     con.query("select a.* from 	sl_sina_detail a order by create_time desc limit 1  ",(err,results)=>{
       if(err) throw err;
       allMessageMonth += "最新一条记录 创建时间为 " +dateFtt(results[0].create_time)+ `\n`;
      })
-         console.log(2);
+
+     con.query("select count(*) num from sl_sina_detail ",(err,results)=>{
+      if(err) throw err;
+      allMessageMonth += "总数量数量：" +results[0].num+`\n`; 
+     })
 
      con.query("select count(*) num from sl_sina_detail a where a.is_like=0 and a.luck_time>now() ",(err,results)=>{
       if(err) throw err;
       allMessageMonth += "未点赞数量：" +results[0].num+`\n`; 
      })
-         console.log(41);
+
 
      con.query("select count(*) num from sl_sina_detail a where a.is_repost=0 and a.luck_time>now() ",(err,results)=>{
       if(err) throw err;
