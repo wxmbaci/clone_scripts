@@ -8,15 +8,12 @@ cron "30 8,12,15,18,21 * * *" jd_CheckCK.js, tag:京东CK检测by-ccwav
 //增加变量停用自动启用CK:  export CKAUTOENABLE="false"
 //增加变量不显示CK备注:  export CKREMARK="false"
 const $ = new Env('微博统计');
-const notify = $.isNode() ? require('./sendNotify') : '';
+// const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 var mysql      = require('mysql');
-const {
-    getEnvs,
-    DisableCk,
-    EnableCk
-} = require('./ql');
-let allMessageMonth = '';
+
+let allMessageMonth = "";
+
 
 !(async() => {
 
@@ -32,25 +29,28 @@ let allMessageMonth = '';
    
 
    con.query("select a.* from 	sl_sina_config a where a.name ='SUB'",(err,results)=>{
-     if(err) throw err;
-     allMessageMonth += "sub 更新时间为" +results[0].update_time+" 值为："+results[0].value +`\n`;
-     allMessageMonth += "sub 更新时间为" +results[0].update_time+" 值为："+results[0].value +`\n`;
-
+     if(err)  console.log(allMessageMonth);;
+     allMessageMonth += "SUB 更新时间为 " +dateFtt(results[0].update_time)+" \nSUB值为："+results[0].value +`\n`;
     })
+    console.log(1);
     con.query("select a.* from 	sl_sina_detail a order by create_time desc limit 1  ",(err,results)=>{
       if(err) throw err;
-      allMessageMonth += "最新一条记录 创建时间为" +results[0].create_time+ `\n`;
- 
+      allMessageMonth += "最新一条记录 创建时间为 " +dateFtt(results[0].create_time)+ `\n`;
      })
+         console.log(2);
+
      con.query("select count(*) num from sl_sina_detail a where a.is_like=0 and a.luck_time>now() ",(err,results)=>{
       if(err) throw err;
       allMessageMonth += "未点赞数量：" +results[0].num+`\n`; 
      })
+         console.log(41);
+
      con.query("select count(*) num from sl_sina_detail a where a.is_repost=0 and a.luck_time>now() ",(err,results)=>{
       if(err) throw err;
       allMessageMonth += "未转发数量：" +results[0].num+`\n`; 
-     })
-  notify.sendNotify(`微博统计信息`, `${allMessageMonth}`);
+      console.log(allMessageMonth);
+      // notify.sendNotify(`微博统计信息`, `${allMessageMonth}`);
+    })
   con.end();
 
 
@@ -60,6 +60,24 @@ let allMessageMonth = '';
 .catch((e) => $.logErr(e))
 .finally(() => $.done())
 
+function dateFtt(date,fmt="yyyy-MM-dd hh:mm:ss") 
+{ //author: meizz 
+ var o = { 
+ "M+" : date.getMonth()+1,     //月份 
+ "d+" : date.getDate(),     //日 
+ "h+" : date.getHours(),     //小时 
+ "m+" : date.getMinutes(),     //分 
+ "s+" : date.getSeconds(),     //秒 
+ "q+" : Math.floor((date.getMonth()+3)/3), //季度 
+ "S" : date.getMilliseconds()    //毫秒 
+ }; 
+ if(/(y+)/.test(fmt)) 
+ fmt=fmt.replace(RegExp.$1, (date.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+ for(var k in o) 
+ if(new RegExp("("+ k +")").test(fmt)) 
+ fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+ return fmt; 
+}
 
 // prettier-ignore
 function Env(t, e) {
