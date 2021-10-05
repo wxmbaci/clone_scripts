@@ -22,6 +22,7 @@ let allMessageMonth = '';
 
   var con = mysql.createConnection({
     host     : process.env.SINA_LUCK_HOST,
+    port     : process.env.SINA_LUCK_PORT,
     user     : process.env.SINA_LUCK_USER,
     password : process.env.SINA_LUCK_PWD,
     database : process.env.SINA_LUCK_DB
