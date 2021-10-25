@@ -4,6 +4,7 @@ const $ = new Env('环游记');
 
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
+let count = 0;
 
 let cookiesArr = [],
     cookie = '',
@@ -304,7 +305,18 @@ function travel_collectAtuoScore() {
                             if (data.data && data['data']['bizCode'] === 0) {
 
                                 console.log(`成功领取${data.data.result.produceScore}个币`)
-                            }
+                            }else if (data.data && data['data']['bizCode'] === -1002) {
+
+                                console.log(data['data']['bizMsg']);
+                                if(count < 10 ){
+                                    await $.wait(1000);
+                                    count++;
+                                    await travel_collectAtuoScore();
+                                    
+                                }
+
+
+                            };
                         } else {
                             console.log(`secretp失败:${JSON.stringify(data)}\n`)
                         }
