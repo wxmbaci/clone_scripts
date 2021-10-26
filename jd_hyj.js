@@ -305,17 +305,6 @@ function travel_collectAtuoScore() {
                             if (data.data && data['data']['bizCode'] === 0) {
 
                                 console.log(`成功领取${data.data.result.produceScore}个币`)
-                            }else if (data.data && data['data']['bizCode'] === -1002) {
-
-                                console.log(data['data']['bizMsg']);
-                                if(count < 10 ){
-                                    await $.wait(1000);
-                                    count++;
-                                    await travel_collectAtuoScore();
-                                    
-                                }
-
-
                             };
                         } else {
                             console.log(`secretp失败:${JSON.stringify(data)}\n`)
@@ -639,7 +628,7 @@ function requireConfig() {
 }
 
 function getUA() {
-    $.UA = `jdapp;android;10.0.6;11;9363537336739353-2636733333439346;network/wifi;model/KB2000;addressid/138121554;aid/9657c795bc73349d;oaid/;osVer/30;appBuild/88852;partner/oppo;eufv/1;jdSupportDarkMode/0;Mozilla/5.0 (Linux; Android 11; KB2000 Build/RP1A.201005.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045537 Mobile Safari/537.36`
+    $.UA =   `jdltapp;android;3.7.0;10;network/wifi;model/MI 8;addressid/1969998059;aid/8566972dfd9a795d;oaid/4a8b773c3e307386;osVer/29;appBuild/1436;psn/PhYbUtCsCJo r 1b8hwxjnY8rEv5S8XC|383;psq/14;adk/;ads/;pap/JA2020_3112531|3.7.0|ANDROID 10;osv/10;pv/374.14;jdv/0|iosapp|t_335139774|liteshare|CopyURL|1609306590175|1609306596;ref/com.jd.jdlite.lib.jdlitemessage.view.activity.MessageCenterMainActivity;partner/jsxdlyqj09;apprpd/MessageCenter_MessageMerge;eufv/1;Mozilla/5.0 (Linux; Android 10; MI 8 Build/QKQ1.190828.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/045140 Mobile Safari/537.36`
 }
 
 function randomString(e) {
