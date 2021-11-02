@@ -446,15 +446,7 @@ let UserName: string, index: number;
       await wait(1000)
     }
   }
-
-  // 获取随机助力码
-  try {
-    let {data}: any = await axios.get('https://api.jdsharecode.xyz/api/jxcfd/20', {timeout: 10000})
-    console.log('获取到20个随机助力码:', data.data)
-    shareCodes = [...shareCodes, ...data.data]
-  } catch (e) {
-    console.log('获取助力池失败')
-  }
+ 
 
   for (let i = 0; i < cookiesArr.length; i++) {
     for (let j = 0; j < shareCodes.length; j++) {

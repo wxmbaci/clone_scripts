@@ -1589,7 +1589,7 @@ function shareCodesFormat() {
     if (readShareCodeRes && readShareCodeRes.code === 200) {
       $.newShareCodes = [...new Set([...$.shareCodes, ...$.strMyShareIds, ...(readShareCodeRes.data || [])])];
     } else {
-      $.newShareCodes = [...new Set([...$.shareCodes, ...$.strMyShareIds])];
+      $.newShareCodes = [...new Set([...$.shareCodes])];
     }
     console.log(`您将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
