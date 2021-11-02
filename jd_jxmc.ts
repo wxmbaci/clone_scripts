@@ -196,14 +196,7 @@ let shareCodesHbInterval: string[] = [], shareCodesHb: string[] = [], shareCodes
     }
   }
 
-  try {
-    let {data}: any = await axios.get('https://api.jdsharecode.xyz/api/jxmchb/30', {timeout: 10000})
-    console.log('获取到30个随机红包码:', data.data)
-    shareCodesHb = [...shareCodesHbInterval, ...shareCodesHb_HW, ...data.data]
-  } catch (e) {
-    console.log('获取助力池失败')
-    shareCodesHb = [...shareCodesHbInterval, ...shareCodesHb_HW]
-  }
+
 
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i]
@@ -223,13 +216,6 @@ let shareCodesHbInterval: string[] = [], shareCodesHb: string[] = [], shareCodes
     }
   }
 
-  try {
-    let {data}: any = await axios.get('https://api.jdsharecode.xyz/api/jxmc/30', {timeout: 10000})
-    console.log('获取到30个随机助力码:', data.data)
-    shareCodes = [...shareCodes, ...data.data]
-  } catch (e) {
-    console.log('获取助力池失败')
-  }
 
   for (let i = 0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i]
