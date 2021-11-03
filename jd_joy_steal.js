@@ -184,7 +184,7 @@ async function jdJoySteal() {
           console.log(`帮好友喂食 开始查询第${i}页好友\n`);
           await getFriends(i);
           $.allFriends = $.getFriendsData.datas;
-          if ($.allFriends) await helpFriendsFeed();
+          // if ($.allFriends) await helpFriendsFeed();//
         }
       }
     } else {
