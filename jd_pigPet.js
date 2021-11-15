@@ -77,10 +77,7 @@ if ($.isNode()) {
       }
     }
   }
-  if (process.env.PIGNF != 'false' && allMessage && new Date().getHours() % 6 === 0) {
-    if ($.isNode()) await notify.sendNotify($.name, allMessage);
-    $.msg($.name, '', allMessage);
-  }
+  notify.sendNotify($.name, allMessage);
 })()
   .catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
