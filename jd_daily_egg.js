@@ -158,7 +158,7 @@ function toDailyHome() {
           if (data) {
             // console.log(data)
             data = JSON.parse(data);
-            if (data.resultData.code !== "0000") {
+            if (data&&data.resultData&&data.resultData.code !== "0000") {
               $.stopNext = true
               console.log($.name+"："+data.resultData.msg)
             }
