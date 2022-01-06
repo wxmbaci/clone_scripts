@@ -12,16 +12,76 @@ import requests
 
 # 使用脚本需要修改的部分 ⬇️
 token = ""
+script_name = '美团红包'
 
-TG_BOT_TOKEN = '' # 通过 @BotFather 申请获得，示例：1077xxx4424:AAFjv0FcqxxxxxxgEMGfi22B4yh15R5uw
-TG_USER_ID = ''  # 用户、群组或频道 ID，示例：129xxx206
-TG_API_HOST = 'tgpusher.shybee.cf'  # 这是我自建的推送api反代，国内可以访问
-# TG_API_HOST = 'api.telegram.org'  # 这是官方的推送API地址
-USE_TG = False
-# ⬆️
+
+'''
+cron: 0 11,14,15,16,17,21,0,1,2,3 * * * meituanshenquanterminal.py
+'''
+
 
 # 关闭ssl校验，用于抓包调试请求
 ssl._create_default_https_context = ssl._create_unverified_context
+
+def printT(s):
+    print("[{0}]: {1}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), s))
+    sys.stdout.flush()
+
+## 获取通知服务
+class msg(object):
+    def __init__(self, m=''):
+        self.str_msg = m
+        self.message()
+    def message(self):
+        global msg_info
+        printT(self.str_msg)
+        try:
+            msg_info = "{}\n{}".format(msg_info, self.str_msg)
+        except:
+            msg_info = "{}".format(self.str_msg)
+        sys.stdout.flush()
+    def getsendNotify(self, a=0):
+        if a == 0:
+            a += 1
+        try:
+            url = 'https://gitee.com/curtinlv/Public/raw/master/sendNotify.py'
+            response = requests.get(url)
+            if 'curtinlv' in response.text:
+                with open('sendNotify.py', "w+", encoding="utf-8") as f:
+                    f.write(response.text)
+            else:
+                if a < 5:
+                    a += 1
+                    return self.getsendNotify(a)
+                else:
+                    pass
+        except:
+            if a < 5:
+                a += 1
+                return self.getsendNotify(a)
+            else:
+                pass
+    def main(self):
+        global send
+        cur_path = os.path.abspath(os.path.dirname(__file__))
+        sys.path.append(cur_path)
+        if os.path.exists(cur_path + "/sendNotify.py"):
+            try:
+                from sendNotify import send
+            except:
+                self.getsendNotify()
+                try:
+                    from sendNotify import send
+                except:
+                    printT("加载通知服务失败~")
+        else:
+            self.getsendNotify()
+            try:
+                from sendNotify import send
+            except:
+                printT("加载通知服务失败~")
+        ###################
+msg().main()
 
 CITY_DICT = {
     "沈阳": [123429092, 41796768],
@@ -70,30 +130,6 @@ d_time6 = datetime.datetime.strptime(
 d_time7 = datetime.datetime.strptime(
     str(datetime.datetime.now().date()) + '11:00', '%Y-%m-%d%H:%M')  # 每天的11点
 
-
-def telegram(desp):
-    data = (('chat_id', TG_USER_ID), ('text', '🎉美团神券自动兑换脚本🎉\n\n' + desp))
-    response = requests.post('https://' + TG_API_HOST + '/bot' + TG_BOT_TOKEN +
-                             '/sendMessage',
-                             data=data)
-    if response.status_code != 200:
-        print('Telegram Bot 推送失败')
-    else:
-        print('Telegram Bot 推送成功')
-
-
-# def telegram(desp):
-#     data = {'chat_id': TG_USER_ID, 'text': '🎉美团神券自动兑换脚本🎉\n\n' + desp}
-#     textmod = json.dumps(data).encode(encoding='utf-8')
-#     header_dict = {
-#         'Accept': 'application/json',
-#         'Content-Type': 'application/json'
-#     }
-#     url = 'https://' + TG_API_HOST + '/bot' + TG_BOT_TOKEN + '/sendMessage'
-#     req = urllib.request.Request(url=url, data=textmod, headers=header_dict)
-#     res = urllib.request.urlopen(req)
-#     res = res.read()
-#     res.decode(encoding='utf-8')
 
 
 def random_dic(dicts):
@@ -671,7 +707,7 @@ class MeiTuan:
             self.log("请求接口失效或参数异常，请稍后再试!\n")
 
     def log(self, text):
-        print(text)
+        msg(text)
         self.desp += text
 
     def request(self, url, data):
@@ -692,8 +728,7 @@ class MeiTuan:
                 print(e, "reason")
 
     def exit_and_push(self):
-        if USE_TG:
-            telegram(self.desp)
+        send(script_name, msg_info)
         exit(0)
 
 
@@ -705,3 +740,4 @@ def main_handler(event, context):
 if __name__ == "__main__":
     m = MeiTuan()
     m.start()
+
