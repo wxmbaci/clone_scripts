@@ -9,6 +9,7 @@ import os
 import datetime
 import random
 import requests
+import sys
 
 # 使用脚本需要修改的部分 ⬇️
 token = ""
