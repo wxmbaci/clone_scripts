@@ -65,7 +65,7 @@ async function showMsg() {
   var total = 0;
   for (let key of myMap.keys()) {
     allMessage += key + ' ---> ' +myMap.get(key)+'京豆 🐶\n'
-    total += key;
+    total += myMap.get(key);
   }
   allMessage = ' 总计---> ' + total + '京豆 🐶\n' + allMessage;
 
