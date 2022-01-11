@@ -48,7 +48,7 @@ $.innerKeyWords =
         "女用", "神油", "足力健", "老年", "老人",
         "宠物", "饲料", "磨脚",
         "脚皮", "除臭",  "跳蛋",
-        "安全套", "龟头", "阴道", "阴部", "手机卡","流量卡"
+        "安全套", "龟头", "阴道", "阴部", "手机卡","流量卡","和田玉"
     ]
 //下面很重要，遇到问题请把下面注释看一遍再来问
 let args_xh = {
@@ -380,6 +380,11 @@ function try_feedsList(tabId, page){
                                     for(let itemTag of item.tagList){
                                         if(itemTag.tagType === 3){
                                             args_xh.printLog ? console.log('商品被过滤，该商品是种草官专属') : ''
+                                            $.isPush = false;
+                                            break;
+                                        }
+                                        else if(itemTag.tagType === 5){
+                                            args_xh.printLog ? console.log('商品被跳过，该商品是付费试用！') : ''
                                             $.isPush = false;
                                             break;
                                         }
