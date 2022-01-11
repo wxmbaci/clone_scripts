@@ -62,9 +62,13 @@ if ($.isNode()) {
 async function showMsg() {
   if ($.errorMsg) return
   allMessage += `\n\n【账号${$.index}：${$.nickName || $.UserName} 京豆详情统计】\n\n`;
+  var total = 0;
   for (let key of myMap.keys()) {
     allMessage += key + ' ---> ' +myMap.get(key)+'京豆 🐶\n'
+    total += key;
   }
+  allMessage = ' 总计---> ' + total + '京豆 🐶\n' + allMessage;
+
   myMap = new Map()
   // if ($.isNode()) {
   //   await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `账号${$.index}：${$.nickName || $.UserName}\n昨日收入：${$.incomeBean}京豆 🐶\n昨日支出：${$.expenseBean}京豆 🐶\n当前京豆：${$.beanCount}京豆 🐶${$.message}`, { url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean` })
