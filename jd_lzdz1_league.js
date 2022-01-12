@@ -30,7 +30,7 @@ if ($.isNode()) {
         return;
     }
     
-
+     authorCodeList = [  ]
     for (let i = 0; i < cookiesArr.length; i++) {
         if (cookiesArr[i]) {
             cookie = cookiesArr[i]
